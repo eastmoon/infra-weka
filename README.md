@@ -30,7 +30,8 @@ docker build --rm -t weka .
 + 確認安裝結果
 
 ```
-docker run -ti --rm --entrypoint /bin/bash weka -l -c "ls"
+docker run -ti --rm --entrypoint /bin/bash weka                 // 進入容器
+docker run -ti --rm --entrypoint /bin/bash weka -l -c "ls"      // 檢視工作目錄內容
 ```
 > 容器預設可執行檔為 weka.jar，若要替換則使用 --entrypoint 參數
 
@@ -41,7 +42,7 @@ docker run -ti --rm weka weka.classifiers.functions.SGD
 ```
 > 文獻說明使用 ```java -jar weka.jar``` 會直接啟動 weka 軟體，但其預設會包括 GUI，因此若要執行命令模式，需使用 ```java -cp weka.jar <java class in weka.jar>```；參考文獻 [Weka from Command Line](https://stackoverflow.com/questions/17090510)
 
-### Weka 操作
+### Weka 指令操作
 
 + 顯示 Weka 類別
     - classifiers 模組，```jar tvf weka.jar | grep weka/classifiers | grep /$```
