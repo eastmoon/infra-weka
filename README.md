@@ -51,12 +51,19 @@ docker run -ti --rm weka weka.classifiers.functions.SGD
     - filters 中的 supervised 類別，```jar tvf weka.jar | grep weka/filters/supervised | grep \.class$```
     - filters 中的 unsupervised 類別，```jar tvf weka.jar | grep weka/filters/unsupervised | grep \.class$```
 
++ [套件安裝 ( Package Manager)](https://waikato.github.io/weka-wiki/packages/manager/)
+    - 顯示所有套件，```docker run -ti --rm weka weka.core.WekaPackageManager -list-packages all```
+    - 安裝指定套件，```docker run -ti --rm weka weka.core.WekaPackageManager -install-package <packageName>```
+
 ## 文獻
 
 + [Weka](https://www.cs.waikato.ac.nz/ml/index.html)
   - [Weka wiki](https://waikato.github.io/weka-wiki/)
   - [Weka wiki - Command line](https://waikato.github.io/weka-wiki/making_predictions/)
 + 教學
+  - [online appendix on the Weka workbench](https://www.cs.waikato.ac.nz/ml/weka/Witten_et_al_2016_appendix.pdf)
 	- [Weka簡介與實作：資料探勘的分群、異常偵測、關聯規則探勘、分類](https://blog.pulipuli.info/2019/10/weka-practice-data-mining-with-weka.html)
 	- [Data Mining：Day 4 - Data Mining 工具介紹 - Weka](https://ithelp.ithome.com.tw/articles/10156032)
   - [Weka and Hadoop Part 3](http://markahall.blogspot.com/2013/10/weka-and-hadoop-part-3.html)
++ 議題
+  - [module java.base does not "opens java.lang" to unnamed module](https://www.cnblogs.com/stcweb/articles/15114266.html)

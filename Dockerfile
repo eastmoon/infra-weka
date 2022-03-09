@@ -19,4 +19,4 @@ RUN \
     unzip weka.zip && rm weka.zip
 
 WORKDIR /${WEKA_VERSION}
-ENTRYPOINT ["java", "-classpath", "weka.jar"]
+ENTRYPOINT ["java", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "-classpath", "weka.jar"]
