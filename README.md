@@ -55,6 +55,109 @@ docker run -ti --rm weka weka.classifiers.functions.SGD
     - 顯示所有套件，```docker run -ti --rm weka weka.core.WekaPackageManager -list-packages all```
     - 安裝指定套件，```docker run -ti --rm weka weka.core.WekaPackageManager -install-package <packageName>```
 
+### 範例
+
+範例依循[The WEKA Workbench - Chapter 5 The Command-Line Interface](https://www.cs.waikato.ac.nz/ml/weka/Witten_et_al_2016_appendix.pdf#page=91)
+
+#### Getting started
+
+Demo code at page 91，execute tree.J48 with weather.arff
+
+```
+docker run -ti --rm -v %cd%\data:/data weka weka.classifiers.trees.J48 -t /data/weather.arff
+```
+
+#### weka.Run
+
+**weka.Run command line tool allows you to type in shortened versions of scheme names**
+
+weka.Run 可用來簡化前面操作指定對象的方式
+
+```
+docker run -ti --rm -v %cd%\data:/data weka weka.Run .J48 -t /data/weather.arff
+```
+
+也可只選擇目標演算法顯示可用的操作
+
+```
+docker run -ti --rm weka weka.Run .J48
+docker run -ti --rm weka weka.Run .SGD
+```
+
+這操作適用於所有透過 Java 類別指定的簡化
+
+```
+docker run -ti --rm -v %cd%\data:/data weka weka.Run .Stacking -M .Logistic -B .J48 -B ".FilteredClassifier -F \".Remove -R 1\" -W .NaiveBayes" -B .OneR -t /data/iris.arff
+```
+
+若不使用簡化，前述的操作會如下所示
+
+```
+docker run -ti --rm -v %cd%\data:/data weka weka.classifiers.meta.Stacking -M weka.classifiers.functions.Logistic -B weka.classifiers.trees.J48 -B "weka.classifiers.meta.FilteredClassifier -F \"weka.filters.unsupervised.attribute.Remove -R 1\" -W weka.classifiers.bayes.NaiveBayes" -B weka.classifiers.rules.OneR -t /data/iris.arff
+```
+
+#### The structure of WEKA
+
++ The weka.core package
+    - [Package weka.core](https://weka.sourceforge.io/doc.dev/weka/core/package-summary.html)，提供 Weka 所有演算法的核心類別集，其中包括大量類別與介面供演算法引用，並確保其運作時可與其他演算法相容。
++ The weka.classifiers package
+    - [Package weka.classifiers](https://weka.sourceforge.io/doc.stable/weka/classifiers/package-summary.html)，是集合了[分類 ( classification ) 與預測 ( prediction )](https://towardsdatascience.com/classification-regression-and-prediction-whats-the-difference-5423d9efe4ec) 演算法的實現類別集。
++ Other packages
+    - [Package weka.associations](https://weka.sourceforge.io/doc.dev/weka/associations/package-summary.html)，[關聯規則學習](https://zh.wikipedia.org/wiki/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0)演算法類別集。
+    - [Package weka.clusterers](https://weka.sourceforge.io/doc.dev/weka/clusterers/package-summary.html)，[集群分析](https://zh.wikipedia.org/wiki/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90)演算法類別集。
+    - [Package weka.datagenerators](https://weka.sourceforge.io/doc.dev/weka/datagenerators/package-summary.html)，[資料生成](https://towardsdatascience.com/keras-data-generators-and-how-to-use-them-b69129ed779c)演算類別集。
+    - [Package weka.estimators](https://weka.sourceforge.io/doc.dev/weka/estimators/package-summary.html)，[估計量](https://zh.wikipedia.org/wiki/%E4%BC%B0%E8%AE%A1%E9%87%8F)演算類別集
+    - [Package weka.filters](https://weka.sourceforge.io/doc.dev/weka/filters/package-summary.html)，定義了所有過濾器的類別集，其實踐類別在如 ```weka.filters.unsupervised.attribute``` 中，提供各類演算法的屬性與資料操作。
+    - [Package weka.attributeSelection](https://weka.sourceforge.io/doc.dev/weka/attributeSelection/package-summary.html)，定義了屬性選擇方式的類別集。
+
+#### Command-line options
+
+對於一個可執行的演算法，可用 ```-h```、```--help``` 來檢視其可用操作選項
+
+```
+docker run -ti --rm weka weka.Run .J48 -h
+```
+
+而其選項可分為兩大類
+
++ Generic options，通用選項，適用所有演算法 ( 下列舉常用選項 )
+    - ```-t```，指定學習 ( Training ) 資料檔
+    - ```-T```，指定測試 ( Testing ) 資料檔，若使用 cross-validation 則使用學習資料檔產生測試資料
+    - ```-c```，指定 class 屬性在資料集的位置 ( index )，預設為最後
+    - ```-x```，cross-validation 分割的 flod 數
+    - ```-no-cv```，不執行 cross-validation
+    - ```-split-percentage```，指定多少百分比的學習資料分為測試資料
+    - ```–preserve-order```，保留百分比分隔的順序資訊
+    - ```-s```，設定隨機種子，適用 cross-validation 與 split-percentage
+    - ```-m```，指定 [Cost Matrix](https://www.openriskmanual.org/wiki/Cost_Matrix) 檔案
+    - ```-l```，指定 model 匯入檔案，其檔案應為 ```.xml``` 檔
+    - ```-d```，指定 model 匯出檔案，其檔案應為 ```.xml``` 檔
+    - ```-v```，輸出學習資料的非統計數據
+    - ```-o```，輸出統計數據
+    - ```-k```，輸出 information-theoretic 統計數據
+    - ```-threshold-file```，指定 threadhold 匯出檔案，其檔案可為 ```.arff``` 或 ```.csv```
++ Scheme-specific options，演算法特定選項，僅適用該演算法
+
+#### Save and Load model
+
++ [Weka wiki - Saving and loading models](https://waikato.github.io/weka-wiki/saving_and_loading_models/)
++ [How to Save Your Machine Learning Model and Make Predictions in Weka](https://machinelearningmastery.com/save-machine-learning-model-make-predictions-weka/)
+
+依據文獻說明，對演算法的模組操作如以下方式：
+
++ 匯出模組
+
+```
+docker run -ti --rm -v %cd%\data:/data -v %cd%\cache:/model weka weka.Run .J48 -C 0.25 -M 2 -t /data/weather.arff -d /model/j48.xml
+```
+
++ 匯入模組
+
+```
+docker run -ti --rm -v %cd%\data:/data -v %cd%\cache:/model weka weka.Run .J48 -t /data/weather.arff -l /model/j48.xml
+```
+
+
 ## 文獻
 
 + [Weka](https://www.cs.waikato.ac.nz/ml/index.html)
