@@ -130,8 +130,8 @@ docker run -ti --rm weka weka.Run .J48 -h
     - ```–preserve-order```，保留百分比分隔的順序資訊
     - ```-s```，設定隨機種子，適用 cross-validation 與 split-percentage
     - ```-m```，指定 [Cost Matrix](https://www.openriskmanual.org/wiki/Cost_Matrix) 檔案
-    - ```-l```，指定 model 匯入檔案，其檔案應為 ```.xml``` 檔
-    - ```-d```，指定 model 匯出檔案，其檔案應為 ```.xml``` 檔
+    - ```-l```，指定 model 匯入檔案，其若為 ```.xml``` 檔僅會使用選項內容，若為 ```.model``` 則會使用 model 內容
+    - ```-d```，指定 model 匯出檔案，其若為 ```.xml``` 檔則僅保存選項內容，若為 ```.model``` 則會儲存 model 內容
     - ```-v```，輸出學習資料的非統計數據
     - ```-o```，輸出統計數據
     - ```-k```，輸出 information-theoretic 統計數據
