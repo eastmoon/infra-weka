@@ -148,13 +148,13 @@ docker run -ti --rm weka weka.Run .J48 -h
 + 匯出模組
 
 ```
-docker run -ti --rm -v %cd%\data:/data -v %cd%\cache:/model weka weka.Run .J48 -C 0.25 -M 2 -t /data/weather.arff -d /model/j48.xml
+docker run -ti --rm -v %cd%\data:/data -v %cd%\cache:/model weka weka.Run .J48 -C 0.25 -M 2 -t /data/weather.arff -d /model/j48.model
 ```
 
 + 匯入模組
 
 ```
-docker run -ti --rm -v %cd%\data:/data -v %cd%\cache:/model weka weka.Run .J48 -t /data/weather.arff -l /model/j48.xml
+docker run -ti --rm -v %cd%\data:/data -v %cd%\cache:/model weka weka.Run .J48 -T /data/weather.arff -l /model/j48.model
 ```
 
 
